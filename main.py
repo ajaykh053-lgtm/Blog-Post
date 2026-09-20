@@ -315,5 +315,3 @@ def send_email(name, email, phone, message):
 
 if __name__ == "__main__":
     app.run(debug=False)
-# ADMIN_EMAIL = "admin@email.com"
-# ADMIN_PASSWORD = "asdf"

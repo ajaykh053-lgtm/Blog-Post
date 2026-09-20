@@ -12,4 +12,3 @@ psycopg-binary==3.3.3
 python-dotenv
 bleach
 psycopg
-postgresql://blog_db_fdwk_user:kAuKdphnLjnwmKKkymz8iVgrKyoRVX8d@dpg-danse3btqb8s73d09td0-a/blog_db_fdwk
