@@ -10,3 +10,4 @@ SQLAlchemy==2.1.0b1
 gunicorn==25.1.0
 psycopg-binary==3.3.3
 dotenv
+bleach
