@@ -5,7 +5,7 @@ Users can register, log in, read posts, and leave comments.
 The admin (first registered user) can create, edit, and delete posts.
 
 ## 🌐 Live Demo
-[View Live](https://blog-post-u61w.onrender.com/post/1)
+[View Live](https://blog-post-u61w.onrender.com)
 
 ---
 
