@@ -51,17 +51,10 @@
             {% for comment in post.comments: %}
             <li>
               <div class="commenterImage">
-              {% if current_user.id == 1: %}
-                <img
-                  src="../static/assets/img/ajay-profile.jpg"
-                  alt="Profile Image"
-                />
-              {% else %}
               <img
                   src="../static/assets/img/default-profile.jpg"
                   alt="Profile Image"
                 />
-              {% endif %}
               </div>
               <div class="commentText">
                 <span class="sub-text">{{comment.comment_author.name}}</span>
