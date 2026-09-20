@@ -20,6 +20,7 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 
 # Optional: add contact me email functionality (Day 60)
 import os
+import psycopg
 import smtplib
 from dotenv import load_dotenv
 
