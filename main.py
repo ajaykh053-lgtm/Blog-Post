@@ -2,6 +2,7 @@ from datetime import date
 from flask import Flask, abort, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
+
 # from flask_gravatar import Gravatar
 from flask_login import (
     UserMixin,
@@ -20,7 +21,7 @@ from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 
 # Optional: add contact me email functionality (Day 60)
 import os
-import smtplib
+import resend
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -40,19 +41,6 @@ def load_user(user_id):
     return db.get_or_404(User, user_id)
 
 
-# For adding profile images to the comment section
-# gravatar = Gravatar(
-#     app,
-#     size=100,
-#     rating="g",
-#     default="retro",
-#     force_default=False,
-#     force_lower=False,
-#     use_ssl=False,
-#     base_url=None,
-# )
-
-
 # CREATE DATABASE
 class Base(DeclarativeBase):
     pass
@@ -61,6 +49,7 @@ class Base(DeclarativeBase):
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DB_URI"]
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
+resend.api_key = os.environ["RESEND_API_KEY"]
 
 
 # CONFIGURE TABLES
@@ -289,9 +278,6 @@ def about():
 # DON'T put your email and password here directly! The code will be visible when you upload to Github.
 # Use environment variables instead (Day 35)
 
-MAIL_ADDRESS = os.environ["EMAIL_KEY"]
-MAIL_APP_PW = os.environ["PASSWORD_KEY"]
-
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
@@ -303,13 +289,21 @@ def contact():
 
 
 def send_email(name, email, phone, message):
-    email_message = f"Subject:New Message\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nMessage:{message}"
-    with smtplib.SMTP("smtp.gmail.com") as connection:
-        connection.starttls()
-        connection.login(MAIL_ADDRESS, MAIL_APP_PW)
-        connection.sendmail(
-            from_addr=email, to_addrs=os.environ["DEVELOPER_EMAIL"], msg=email_message
-        )
+    resend.Emails.send(
+        {
+            "from": "onboarding@resend.dev",  # your verified sender on Resend
+            "to": os.environ["DEVELOPER_EMAIL"],  # your receiving email (already in .env)
+            "reply_to": email,  # visitor can be replied to directly
+            "subject": f"New Message from {name}",
+            "html": f"""
+            <h3>New Contact Form Submission</h3>
+            <p><b>Name:</b> {name}</p>
+            <p><b>Email:</b> {email}</p>
+            <p><b>Phone:</b> {phone}</p>
+            <p><b>Message:</b> {message}</p>
+        """,
+        }
+    )
 
 
 if __name__ == "__main__":
